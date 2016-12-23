@@ -28,25 +28,18 @@
          */
         this.buildLayout = function()
         {
-            var $items =           this.$element.children(':not(.elastic-columns-ignore)');
-            var container_width =  this.$element.width();
+            var container =        this.$element;
+            var $items =           container.children(':not(.elastic-columns-ignore)');
+            var container_width =  container.width();
             var column_width =     (container_width - (this.settings.innerMargin * (this.settings.columns - 1)) - (this.settings.outerMargin * 2)) / this.settings.columns;
             for(var index = 0; index < this.settings.columns; index += 1)
             {
                 this.columns[index] = this.settings.outerMargin;
             }
-
-            var parent;
-            var parent_top;
-            var parent_left;
-            var first_item = $($items.get(0));
-            if (first_item) {
-                parent = first_item.parent();
-                var parent_left_padding = parseInt(parent.css('padding-left'));
-                var parent_top_padding = parseInt(parent.css('padding-top'));
-                parent_left = parent.offset().left + parent_left_padding;
-                parent_top = parent.offset().top + parent_top_padding;
-            }
+            var container_left_padding = parseInt(container.css('padding-left'));
+            var container_top_padding =  parseInt(container.css('padding-top'));
+            var container_left =         container.offset().left + container_left_padding;
+            var container_top =          container.offset().top + container_top_padding;
 
             // Iterates into elements
             for(var item_id = 0; item_id < $items.length; item_id += 1)
@@ -60,8 +53,8 @@
                 var is_relative = (this.settings.position === 'relative');
                 $item.css('position', 'absolute');
                 $item.css('width', (column_width) + 'px');
-                $item.css('left', (parent_left * is_relative + this.settings.outerMargin + (this.settings.innerMargin * smallest_column) + (smallest_column * column_width)) + 'px');
-                $item.css('top', (parent_top * is_relative + this.columns[smallest_column]) + 'px');
+                $item.css('left', (container_left * is_relative + this.settings.outerMargin + (this.settings.innerMargin * smallest_column) + (smallest_column * column_width)) + 'px');
+                $item.css('top', (container_top * is_relative + this.columns[smallest_column]) + 'px');
 
                 // Updates columns height
                 this.columns[smallest_column] += $item.outerHeight() + this.settings.innerMargin;
